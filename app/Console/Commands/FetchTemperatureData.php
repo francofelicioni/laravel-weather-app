@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 class FetchTemperatureData extends Command
 {
     protected $signature = 'app:fetch-temperature-data';
-    protected $description = 'Fetch temperature data from Palma de Mallorca city using Open-Meteo API'; 
+    protected $description = 'Fetch temperature data for cities using Open-Meteo API'; 
 
     private $weatherService;
 
@@ -21,20 +21,27 @@ class FetchTemperatureData extends Command
 
     public function handle()
     {
-        $city = DB::table('cities')->where('name', 'Palma de Mallorca')->first();
+        $cities = DB::table('cities')->get();
 
-        if (!$city) {
-            $this->error('City not founded');
+        if ($cities->isEmpty()) {
+            $this->error('No cities found.');
             return 1;
         }
 
-        $latitude = $city->latitude;
-        $longitude = $city->longitude;
+        foreach ($cities as $city) {
+            $latitude = $city->latitude;
+            $longitude = $city->longitude;
 
-        $result = $this->weatherService->fetchAndStoreTemperatureData($latitude, $longitude);
-        $this->info($result);
+            $this->info("Fetching temperature data for {$city->name} (Lat: {$latitude}, Lon: {$longitude})");
+
+            try {
+                $result = $this->weatherService->fetchAndStoreTemperatureData($latitude, $longitude);
+                $this->info("Success: {$result}");
+            } catch (\Exception $e) {
+                $this->error("Failed to fetch temperature data for {$city->name}: " . $e->getMessage());
+            }
+        }
 
         return 0;
     }
-
 }

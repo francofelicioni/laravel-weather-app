@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Services;
+
+use Carbon\Carbon;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\DB;
 
@@ -22,20 +24,26 @@ class WeatherService
             return 'City not found.';
         }
 
-        $url = "{$this->apiUrl}?latitude={$latitude}&longitude={$longitude}&hourly=temperature_2m&timezone=Europe%2FBerlin";
+        $url = "{$this->apiUrl}?latitude={$latitude}&longitude={$longitude}&hourly=temperature_2m&wind_speed_unit=kn&timezone=Europe%2FBerlin&forecast_days=7";
 
         try {
             $response = $this->client->get($url);
             $data = json_decode($response->getBody(), true);
 
-            if (isset($data['hourly']['temperature_2m'])) {
+            if (isset($data['hourly']['time']) && isset($data['hourly']['temperature_2m'])) {
+                $times = $data['hourly']['time'];
                 $temperatures = $data['hourly']['temperature_2m'];
-                $currentTimestamp = now();
 
-                foreach ($temperatures as $hour => $temperature) {
+                if (count($times) !== count($temperatures)) {
+                    return 'Mismatch between times and temperatures data.';
+                }
+
+                foreach ($times as $index => $time) {
+                    $time = Carbon::parse($time);
+
                     DB::table('temperatures')->updateOrInsert(
-                        ['city_id' => $city->id, 'recorded_at' => $currentTimestamp->addHour($hour)],
-                        ['temperature' => $temperature]
+                        ['city_id' => $city->id, 'time' => $time],
+                        ['temperature' => $temperatures[$index]]
                     );
                 }
 
@@ -48,4 +56,3 @@ class WeatherService
         }
     }
 }
-

@@ -1,7 +1,7 @@
 @extends('layout.base')
 
-@section('meta-title') Welcome to Weather App @endsection
-@section('meta-description') Weather App is powered by Next Level Affiliate Marketing @endsection
+@section('meta-title') @lang('meta.home.title') @endsection
+@section('meta-description') @lang('meta.home.description') @endsection
 
 @section('content')
 <div class="p-4 h-full w-full flex flex-col justify-center items-center space-y-8 lg:pt-20">

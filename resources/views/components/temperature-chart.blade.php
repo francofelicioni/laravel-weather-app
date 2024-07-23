@@ -1,4 +1,4 @@
-<div class="p-4 h-full flex flex-col justify-center h-full space-y-8">
+<div class="lg:p-4 h-full flex flex-col justify-center h-full space-y-8">
     <h1 class="text-lg p-4">Temperature Data for: <span class="font-bold">{{ $city }}</span></h1>
     <canvas id="temperatureChart"></canvas>
 </div>

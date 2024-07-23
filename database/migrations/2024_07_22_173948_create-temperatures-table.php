@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('city_id')->constrained('cities')->onDelete('cascade');
             $table->decimal('temperature', 5, 2);
-            $table->timestamp('recorded_at');
+            $table->timestamp('time');
             $table->timestamps();
         });
     }

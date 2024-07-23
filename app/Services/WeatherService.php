@@ -24,7 +24,7 @@ class WeatherService
             return 'City not found.';
         }
 
-        $url = "{$this->apiUrl}?latitude={$latitude}&longitude={$longitude}&hourly=temperature_2m&wind_speed_unit=kn&timezone=Europe%2FBerlin&forecast_days=7";
+        $url = "{$this->apiUrl}?latitude={$latitude}&longitude={$longitude}&hourly=temperature_2m&wind_speed_unit=kn&timezone=Europe%2FBerlin&forecast_days=14";
 
         try {
             $response = $this->client->get($url);

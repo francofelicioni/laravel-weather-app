@@ -9,5 +9,5 @@ class Temperature extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['city_id', 'temperature', 'recorded_at'];
+    protected $fillable = ['city_id', 'temperature', 'time'];
 }

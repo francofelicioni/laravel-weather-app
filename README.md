@@ -1,66 +1,103 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Weather Temperature Tracking App
+## Overview
+This project is a Laravel-based web application that tracks and displays hourly temperature data for various cities using the Open-Meteo API. It includes:
+- A console command to fetch and store temperature data for all cities.
+- A web interface to visualize temperature data using charts.
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Features
+- Fetch hourly temperature data for multiple cities.
+- Store and update temperature data in a database.
+- Visualize temperature data on a web page with charts.
 
-## About Laravel
+## Requirements
+- Docker
+- Docker Compose
+- PHP (7.4 or higher)
+- Composer
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Getting Started
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+**Notes:**
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- If you are using Sail (Laravel's official Docker development environment), make sure that the `sail` command is accessible. If you haven't set up an alias, you may need to use `./vendor/bin/sail` instead of just `sail` when referencing the `sail` command.
 
-## Learning Laravel
+1. Clone the Repository
+    - `git clone https://github.com/francofelicioni/laravel-weather-app.git`
+    - `cd laravel-weather-app`
+2. Setup Docker Environment
+    - Make sure you have Docker and Docker Compose installed on your system.
+3. To initialize Docker for first time for this project, in root directory of the app, paste this command:
+    docker run --rm \
+        -u "$(id -u):$(id -g)" \
+        -v "$(pwd):/var/www/html" \
+        -w /var/www/html \
+        laravelsail/php83-composer:latest \
+        composer install --ignore-platform-reqs
+4. Configure Environment
+    - Create Environment Variables
+        - `cp .env.example .env`
+        - Update the `.env` File
+            - `APP_NAME=WeatherApp`
+            - `APP_ENV=local`
+            - `APP_KEY=base64:your-key-here`
+            - `APP_DEBUG=true`
+            - `APP_URL=http://localhost`
+            - `DB_CONNECTION=mysql`
+            - `DB_HOST=mysql`
+            - `DB_PORT=3306`
+            - `DB_DATABASE=laravel`
+            - `DB_USERNAME=root`
+            - `DB_PASSWORD=`
+            - `CACHE_DRIVER=file`
+            - `QUEUE_CONNECTION=sync`
+5. Start the containers
+    - `sail up`
+6. Install NPM Dependencies
+    - `sail npm install`
+7. Run migrations
+    - `sail artisan migrate`
+8. Generate Key
+    - Load seed data into the database: `sail artisan key:generate`
+9. Seed the Database
+    - Load seed data into the database: `sail artisan db:seed`
+10. Fetch Temperature Data
+    - To fetch and store temperature data for all cities, run the following command: `sail artisan app:fetch-temperature-data`
+11. Run dev and enjoy the app
+    - To start the app, run the following command: `sail npm run dev`
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Usage
+### Accessing the Application
+After setting up and running the Docker containers, you can access the application at: `http://localhost`
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+### Viewing Temperature Data
+- Homepage: Displays a summary or list of cities.
+- City Details Page: Shows temperature data in a chart for a specific city.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Updating Temperature Data
+Run the console command periodically using a task scheduler or cron job to keep the data up-to-date:
+    - `docker-compose exec app sail artisan app:fetch-temperature-data`
 
-## Laravel Sponsors
+## Docker Commands
+- Start Containers: `sail up`
+- Stop Containers: `sail down`
+- Rebuild Containers: `sail up --build`
+- Run Composer Install: `sail exec app composer install`
+- Run Artisan Commands: `sail exec app sail artisan <command>`
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
-
-### Premium Partners
-
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+## API Integration
+The WeatherService class fetches data from the Open-Meteo API. Ensure you have internet access for API requests. Adjust the API URL and parameters if necessary.
 
 ## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+If you’d like to contribute, please fork the repository and submit a pull request with your changes.
 
 ## License
+This project is licensed under the MIT License.
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## Acknowledgments
+- Laravel Framework
+- Open-Meteo API
+- Docker
+- Chart.js
+
+## Author
+- Franco Felicioni

@@ -16,6 +16,12 @@ class WeatherService
 
     public function fetchAndStoreTemperatureData($latitude, $longitude)
     {
+        $city = DB::table('cities')->where('latitude', $latitude)->where('longitude', $longitude)->first();
+
+        if (!$city) {
+            return 'City not found.';
+        }
+
         $url = "{$this->apiUrl}?latitude={$latitude}&longitude={$longitude}&hourly=temperature_2m&timezone=Europe%2FBerlin";
 
         try {
@@ -28,7 +34,7 @@ class WeatherService
 
                 foreach ($temperatures as $hour => $temperature) {
                     DB::table('temperatures')->updateOrInsert(
-                        ['city_id' => 1, 'recorded_at' => $currentTimestamp->addHour($hour)],
+                        ['city_id' => $city->id, 'recorded_at' => $currentTimestamp->addHour($hour)],
                         ['temperature' => $temperature]
                     );
                 }

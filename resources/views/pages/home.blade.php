@@ -7,7 +7,7 @@
 <div class="p-4 flex flex-col justify-start items-center">
     
     <div class="flex flex-col w-full justify-center items-center mt-6 lg:mt-12 space-y-8">
-        <h1 class="text-center text-2xl w-22 lg:mb-6">Choose the city you want to see the temperature information</h1>
+        <h1 class="text-center text-2xl w-22 lg:mb-6">@lang('home.main_title')</h1>
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-12">
             @foreach ($cities as $city)
             <div class="relative group">

@@ -10,10 +10,10 @@
     <link rel="icon" type="image/x-icon" href="{{asset('images/icons/favicon.ico')}}">
 </head>
 
-<body class="min-h-screen flex flex-col">
-    <div id="app" class="flex flex-col flex-grow">
+<body>
+    <div id="app" class="grid grid-rows-[auto_1fr_auto] min-h-screen">
         @include('layout.header')
-        <main class="flex-grow overflow-hidden">
+        <main>
             @yield('content')
         </main>
         @include('layout.footer')

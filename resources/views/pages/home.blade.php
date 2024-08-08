@@ -4,10 +4,10 @@
 @section('meta-description') @lang('meta.home.description') @endsection
 
 @section('content')
-<div class="p-4 h-full w-full flex flex-col justify-center items-center space-y-8 lg:pt-20">
-    <h1 class="text-center text-2xl w-22 lg:mb-6">Choose the city you want to see the temperature information</h1>
-
-    <div class="flex w-full justify-center items-center">
+<div class="p-4 flex flex-col justify-start items-center">
+    
+    <div class="flex flex-col w-full justify-center items-center mt-6 lg:mt-12 space-y-8">
+        <h1 class="text-center text-2xl w-22 lg:mb-6">Choose the city you want to see the temperature information</h1>
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-12">
             @foreach ($cities as $city)
             <div class="relative group">

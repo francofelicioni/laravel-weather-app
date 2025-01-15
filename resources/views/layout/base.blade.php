@@ -8,6 +8,7 @@
     <meta name="description" content="@yield('meta-description')">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="icon" type="image/x-icon" href="{{asset('images/icons/favicon.ico')}}">
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
 <body>
